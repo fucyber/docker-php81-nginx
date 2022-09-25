@@ -9,7 +9,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: docker-php81-nginx:0.1
+    image: docker-php81-nginx:latest
     container_name: laravel9
     ports:
       - 1009:80
