@@ -13,7 +13,6 @@ RUN apk update && apk upgrade
 RUN apk add bash
 RUN sed -i 's/bin\/ash/bin\/bash/g' /etc/passwd
 
-
 RUN apk --no-cache --repository https://dl-cdn.alpinelinux.org/alpine/edge/main add \
     icu-libs \
     &&apk --no-cache --repository https://dl-cdn.alpinelinux.org/alpine/edge/community add \
@@ -46,8 +45,7 @@ RUN apk --no-cache --repository https://dl-cdn.alpinelinux.org/alpine/edge/main 
     php81-dom \
     php81-fpm \
     php81-sodium \
-    php81-fpm \
-    # php81-mysql \
+    php81-fpm \ 
     php81-pdo_mysql \
     php81-pdo \
     php81-tokenizer \
@@ -62,14 +60,10 @@ RUN apk --no-cache --repository https://dl-cdn.alpinelinux.org/alpine/edge/main 
 ARG COMPOSER_VERSION=2.2.1
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION}
 
-# RUN curl -sS https://getcomposer.org/installer -o composer-setup.php
-# RUN php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-# RUN rm -rf composer-setup.php
-
 RUN apk --no-cache add curl nano
 
 RUN mkdir -p /etc/supervisor.d/
-COPY server/supervisord.ini /etc/supervisor.d/supervisord.ini
+COPY dockers/supervisord.ini /etc/supervisor.d/supervisord.ini
 
 # sock-file
 RUN mkdir -p /var/run/
@@ -79,13 +73,13 @@ RUN mkdir /var/run/php
 RUN mkdir -p /run/php/
 RUN touch /run/php/php81.0-fpm.pid
 
-COPY server/php.ini-production /etc/php81/php.ini
-# COPY server/php-fpm.conf /etc/php81/php-fpm.conf
+COPY dockers/php.ini-production /etc/php81/php.ini
+# COPY dockers/php-fpm.conf /etc/php81/php-fpm.conf
 
 
 # Configure NGINX
-COPY server/nginx.conf /etc/nginx/nginx.conf
-# COPY server/nginx-laravel.conf /etc/nginx/http.d/default.conf
+COPY dockers/nginx.conf /etc/nginx/nginx.conf
+# COPY dockers/nginx-laravel.conf /etc/nginx/http.d/default.conf
 
 RUN mkdir -p /run/nginx/
 RUN touch /run/nginx/nginx.pid
